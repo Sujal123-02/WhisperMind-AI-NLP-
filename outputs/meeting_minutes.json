@@ -1,0 +1,238 @@
+{
+  "meeting_title": "Sprint Sync & NLP Architecture Planning",
+  "meeting_date": "2026-11-23",
+  "source_audio": "sample_10_minute_meeting.wav",
+  "participants": [
+    "SPEAKER_00",
+    "SPEAKER_01",
+    "SPEAKER_02"
+  ],
+  "summary": "Alright team, let's start today's sprint sync on the NLP pipeline. I finished benchmarking the Whisper-small model on our audio recordings yesterday. Did we decide on using Whisper-small or Faster-Whisper for production?",
+  "key_discussion_points": [
+    "I finished benchmarking the Whisper-small model on our audio recordings yesterday.",
+    "Did we decide on using Whisper-small or Faster-Whisper for production?",
+    "I propose we use Faster-Whisper with 8-bit quantization because it cuts latency by 40%.",
+    "We officially confirm Faster-Whisper with INT8 as our baseline.",
+    "I can complete the benchmark by Friday."
+  ],
+  "decisions": [
+    {
+      "decision": "Use Great! Did we decide on using Whisper-small or Faster-Whisper for production?",
+      "status": "proposed",
+      "evidence_segment_ids": [
+        "seg_003"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.871
+    },
+    {
+      "decision": "Use Faster-Whisper with 8-bit quantization because it cuts latency by 40%.",
+      "status": "proposed",
+      "evidence_segment_ids": [
+        "seg_004"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.915
+    },
+    {
+      "decision": "Confirmed We officially confirm Faster-Whisper with INT8 as our baseline.",
+      "status": "confirmed",
+      "evidence_segment_ids": [
+        "seg_005"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.883
+    },
+    {
+      "decision": "Confirmed Now, what about speaker diarization?",
+      "status": "confirmed",
+      "evidence_segment_ids": [
+        "seg_006"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.9
+    },
+    {
+      "decision": "Right, cloud deployment provider selection is deferred until we get budget approval.",
+      "status": "deferred",
+      "evidence_segment_ids": [
+        "seg_013"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.98
+    }
+  ],
+  "action_items": [
+    {
+      "task": "We are evaluating pyannote.audio 3.1. I can complete the benchmark by Friday.",
+      "owner": "SPEAKER_01",
+      "deadline_text": "by Friday",
+      "deadline_date": null,
+      "status": "accepted",
+      "evidence_segment_ids": [
+        "seg_007"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.98
+    },
+    {
+      "task": "pyannote integration task.",
+      "owner": "SPEAKER_02",
+      "deadline_text": "TBD",
+      "deadline_date": null,
+      "status": "accepted",
+      "evidence_segment_ids": [
+        "seg_008"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.675
+    },
+    {
+      "task": "For summarization, I might be able to deliver the comparison between BART and LED by Monday.",
+      "owner": "SPEAKER_02",
+      "deadline_text": "by Monday",
+      "deadline_date": null,
+      "status": "proposed",
+      "evidence_segment_ids": [
+        "seg_009"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.98
+    },
+    {
+      "task": "deliver BART vs LED report by Monday.",
+      "owner": "SPEAKER_02",
+      "deadline_text": "by Monday",
+      "deadline_date": null,
+      "status": "accepted",
+      "evidence_segment_ids": [
+        "seg_010"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.856
+    },
+    {
+      "task": "report on Monday.",
+      "owner": "SPEAKER_00",
+      "deadline_text": "on Monday",
+      "deadline_date": null,
+      "status": "accepted",
+      "evidence_segment_ids": [
+        "seg_011"
+      ],
+      "needs_review": false,
+      "verification_verdict": "supported",
+      "confidence": 0.8
+    }
+  ],
+  "unresolved_issues": [
+    "One open question: are we deploying on AWS or GCP? That remains unresolved for now.",
+    "Right, cloud deployment provider selection is deferred until we get budget approval."
+  ],
+  "comprehend_insights": {
+    "is_active": false,
+    "entities": [
+      {
+        "text": "SPEAKER_00",
+        "type": "PERSON",
+        "score": 0.98
+      },
+      {
+        "text": "SPEAKER_01",
+        "type": "PERSON",
+        "score": 0.98
+      },
+      {
+        "text": "SPEAKER_02",
+        "type": "PERSON",
+        "score": 0.98
+      },
+      {
+        "text": "today",
+        "type": "DATE",
+        "score": 0.95
+      },
+      {
+        "text": "yesterday",
+        "type": "DATE",
+        "score": 0.95
+      },
+      {
+        "text": "Friday",
+        "type": "DATE",
+        "score": 0.95
+      },
+      {
+        "text": "Monday",
+        "type": "DATE",
+        "score": 0.95
+      },
+      {
+        "text": "Whisper",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "Faster-Whisper",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "pyannote",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "BART",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "LED",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "AWS",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      },
+      {
+        "text": "GCP",
+        "type": "ORGANIZATION/COMMERCIAL",
+        "score": 0.92
+      }
+    ],
+    "key_phrases": [
+      "NLP pipeline",
+      "sprint sync",
+      "speech recognition",
+      "speaker diarization",
+      "Whisper-small model",
+      "Faster-Whisper",
+      "pyannote.audio 3.1",
+      "BART vs LED comparison report",
+      "cloud deployment provider",
+      "budget approval"
+    ],
+    "sentiment": "NEUTRAL",
+    "sentiment_scores": {
+      "Positive": 0.22,
+      "Negative": 0.05,
+      "Neutral": 0.68,
+      "Mixed": 0.05
+    },
+    "pii_entities": []
+  },
+  "raw_transcript": "[seg_001] [00:00 - 00:04] SPEAKER_00: Alright team, let's start today's sprint sync on the NLP pipeline.\n[seg_002] [00:04 - 00:09] SPEAKER_01: Sure. I finished benchmarking the Whisper-small model on our audio recordings yesterday.\n[seg_003] [00:09 - 00:14] SPEAKER_02: Great! Did we decide on using Whisper-small or Faster-Whisper for production?\n[seg_004] [00:14 - 00:21] SPEAKER_02: I propose we use Faster-Whisper with 8-bit quantization because it cuts latency by 40%.\n[seg_005] [00:21 - 00:25] SPEAKER_00: I agree. We officially confirm Faster-Whisper with INT8 as our baseline.\n[seg_006] [00:26 - 00:31] SPEAKER_01: Confirmed. Now, what about speaker diarization?\n[seg_007] [00:31 - 00:37] SPEAKER_01: We are evaluating pyannote.audio 3.1. I can complete the benchmark by Friday.\n[seg_008] [00:38 - 00:42] SPEAKER_02: Awesome. Please take ownership of that pyannote integration task.\n[seg_009] [00:43 - 00:49] SPEAKER_02: For summarization, I might be able to deliver the comparison between BART and LED by Monday.\n[seg_010] [00:49 - 00:55] SPEAKER_02: Let's make that a formal action item: deliver BART vs LED report by Monday.\n[seg_011] [00:55 - 00:58] SPEAKER_00: Accepted. I will deliver the report on Monday.\n[seg_012] [00:58 - 01:04] SPEAKER_01: One open question: are we deploying on AWS or GCP? That remains unresolved for now.\n[seg_013] [01:04 - 01:08] SPEAKER_02: Right, cloud deployment provider selection is deferred until we get budget approval.",
+  "generated_at": "2026-11-23 17:11:52"
+}

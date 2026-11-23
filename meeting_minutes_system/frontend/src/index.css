@@ -1,0 +1,180 @@
+/* ============================================================
+   index.css  –  Meeting Minutes AI
+   Claymorphism + Glassmorphism Design System
+   Font: Plus Jakarta Sans (loaded via Google Fonts in index.html)
+============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg:       #EEF4FF;
+  --primary:  #2563EB;
+  --secondary:#0D9488;
+  --text:     #1E293B;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Claymorphism card ── */
+.clay {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(37, 99, 235, 0.04);
+}
+.clay-dark {
+  background: rgba(30, 41, 59, 0.78);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+}
+.clay-teal {
+  background: rgba(13, 148, 136, 0.90);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: white;
+}
+.clay-blue {
+  background: rgba(37, 99, 235, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.20);
+  color: white;
+}
+
+/* ── Page root ── */
+.landing-root {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: var(--bg);
+}
+
+/* ── Navbar strip (no side radius) ── */
+.nav-strip {
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+}
+
+/* ── Animated gradient blobs ── */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: blobFloat 8s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-24px) scale(1.04); }
+}
+
+/* ── Wave bar (audio visualiser) ── */
+.wave-bar {
+  display: inline-block;
+  border-radius: 3px;
+  animation: wavePulse 1.2s ease-in-out infinite;
+}
+@keyframes wavePulse {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(1); }
+}
+
+/* ── Nav pill ── */
+.nav-pill { transition: background 0.25s, color 0.25s, box-shadow 0.25s; }
+.nav-pill:hover { background: rgba(37, 99, 235, 0.08); }
+.nav-pill.active {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563EB;
+  font-weight: 700;
+}
+
+/* ── Feature / stat card hover-lift ── */
+.feat-card {
+  transition: transform 0.28s cubic-bezier(.22,1,.36,1), box-shadow 0.28s;
+}
+.feat-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.14);
+}
+
+/* ── Button press ── */
+.btn-press {
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+.btn-press:hover  { transform: translateY(-2px); filter: brightness(1.06); }
+.btn-press:active { transform: scale(0.97); }
+
+/* ── Pipeline step pill ── */
+.step-pill { transition: transform 0.25s, box-shadow 0.25s; }
+.step-pill:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.18);
+}
+
+/* ── Animated underline draw ── */
+@keyframes drawLine {
+  from { stroke-dashoffset: 300; }
+  to   { stroke-dashoffset: 0; }
+}
+.animated-underline path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 0;
+  animation: drawLine 1.4s ease-out 0.5s both;
+}
+
+/* ── Floating badge bob ── */
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+.float-badge { animation: floatBadge 3.5s ease-in-out infinite; }
+
+/* ── Scroll fade-up ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Modal enter ── */
+.modal-backdrop { animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box { animation: popIn 0.25s cubic-bezier(.22,1,.36,1); }
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Spinner ── */
+.spinner { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Progress bar gradient ── */
+.progress-bar {
+  background: linear-gradient(90deg, #2563EB, #0D9488);
+  transition: width 0.5s ease;
+}
+
+/* ── Scrollbar (results panel) ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.5); }
+
+/* ── Tailwind additions ── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
