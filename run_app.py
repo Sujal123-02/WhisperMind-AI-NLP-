@@ -27,11 +27,11 @@ os.environ.setdefault("PROJECT_ROOT", PROJECT_ROOT)
 if __name__ == "__main__":
     host = "127.0.0.1"
     port = 8000
-    url  = f"http://{host}:{port}"
+    url  = f"http://localhost:{port}"
 
     print("=" * 70)
-    print("  Meeting Minutes AI")
-    print("  Powered by Whisper ASR, FLAN-T5 & Amazon Comprehend")
+    print("  WhisperMind AI")
+    print("  Powered by Whisper ASR, FLAN-T5 & Cloud NLP Services")
     print("=" * 70)
     print(f"[+] Backend dir : {BACKEND_DIR}")
     print(f"[+] Project root: {PROJECT_ROOT}")

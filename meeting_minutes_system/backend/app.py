@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import shutil
 from datetime import datetime
@@ -15,7 +16,7 @@ from services.comprehend_service import AmazonComprehendService
 from services.export_service import ExportService
 
 app = FastAPI(
-    title="Automated Meeting Minutes Generator API",
+    title="WhisperMind AI API",
     description="Backend API powered by Whisper ASR, FLAN-T5, and Amazon Comprehend Cloud AI Services"
 )
 
@@ -100,18 +101,16 @@ def configure_aws(payload: AWSConfigPayload):
 @app.get("/api/sample-meeting")
 def get_sample_meeting():
     """
-    Returns the complete processed result for the 10-minute sprint sync meeting.
-    Allows instant testing in the React UI without waiting for full audio upload.
+    Returns the processed result for the built-in 10-minute sprint sync demo.
+    Uses the fixed demo transcript – no Whisper inference needed.
     """
-    sample_path = os.path.join(PROJECT_ROOT, "sample_10_minute_meeting.wav")
-    full_text, segments = asr_service.transcribe_and_align(sample_path)
-    mom_result = mom_service.generate_mom(segments)
+    full_text, segments = asr_service.get_sample_segments()
+    mom_result       = mom_service.generate_mom(segments)
     sentiment_result = comprehend_service.analyze_sentiment(segments)
-    topic_result = comprehend_service.analyze_topics(segments)
+    topic_result     = comprehend_service.analyze_topics(segments)
+    participants     = sorted(set(s["speaker_id"] for s in segments))
 
-    participants = sorted(list(set(s["speaker_id"] for s in segments)))
-
-    response_payload = {
+    return {
         "meeting_title": "Sprint Sync: NLP Architecture & Pipeline Planning",
         "meeting_date": datetime.now().strftime("%Y-%m-%d"),
         "source_file": "sample_10_minute_meeting.wav",
@@ -123,41 +122,47 @@ def get_sample_meeting():
         "unresolved_issues": mom_result["unresolved_issues"],
         "sentiment_analysis": sentiment_result,
         "topic_modeling": topic_result,
-        "transcript_segments": segments
+        "transcript_segments": segments,
     }
-    return response_payload
 
 @app.post("/api/process-meeting")
 async def process_meeting(
     file: Optional[UploadFile] = File(None),
-    meeting_title: str = Form("Sprint Sync & Technical Discussion")
+    meeting_title: str = Form("Meeting Minutes"),
 ):
     """
-    Accepts an audio file upload, transcribes with Whisper, generates MoM,
-    and runs Amazon Comprehend Sentiment Analysis and Topic Modeling.
+    Accepts a real audio upload → Whisper → MoM → Comprehend.
+    Always processes the uploaded file; never falls back to demo data.
     """
-    if file:
-        file_path = os.path.join(UPLOAD_DIR, file.filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-    else:
-        file_path = os.path.join(PROJECT_ROOT, "sample_10_minute_meeting.wav")
+    if not file:
+        raise HTTPException(
+            status_code=400,
+            detail="No audio file provided. Please upload a .wav or .mp3 file."
+        )
 
-    print(f"[*] Processing audio file: {file_path}")
-    
-    # 1. ASR & Speaker Alignment
-    full_text, segments = asr_service.transcribe_and_align(file_path)
+    safe_filename = re.sub(r"[^\w.\-]", "_", file.filename)
+    file_path = os.path.join(UPLOAD_DIR, safe_filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
 
-    # 2. Minutes of Meeting Generation
+    print(f"[*] Processing uploaded audio: {file_path}")
+
+    try:
+        # 1. ASR – runs Whisper on the real uploaded file
+        full_text, segments = asr_service.transcribe_and_align(file_path)
+    except (FileNotFoundError, RuntimeError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+    # 2. MoM generation (dynamic – based on actual transcript)
     mom_result = mom_service.generate_mom(segments)
 
-    # 3. Cloud AI Services (Amazon Comprehend)
+    # 3. Cloud AI / local NLP (Sentiment & Topics)
     sentiment_result = comprehend_service.analyze_sentiment(segments)
-    topic_result = comprehend_service.analyze_topics(segments)
+    topic_result     = comprehend_service.analyze_topics(segments)
 
-    participants = sorted(list(set(s["speaker_id"] for s in segments)))
+    participants = sorted(set(s["speaker_id"] for s in segments))
 
-    result_payload = {
+    return {
         "meeting_title": meeting_title,
         "meeting_date": datetime.now().strftime("%Y-%m-%d"),
         "source_file": os.path.basename(file_path),
@@ -169,9 +174,8 @@ async def process_meeting(
         "unresolved_issues": mom_result["unresolved_issues"],
         "sentiment_analysis": sentiment_result,
         "topic_modeling": topic_result,
-        "transcript_segments": segments
+        "transcript_segments": segments,
     }
-    return result_payload
 
 @app.post("/api/export-docx")
 def export_docx(data: Dict[str, Any]):

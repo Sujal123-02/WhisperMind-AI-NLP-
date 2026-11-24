@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meeting Minutes AI</title>
+  <title>WhisperMind AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -184,7 +184,7 @@ function LandingPage({ onGetStarted }) {
   const features = [
     { icon: '🎙️', color: 'from-teal-400 to-cyan-500', bg: 'bg-teal-50', label: 'Transcribe', desc: 'Audio to text with speaker identification and precise timestamps.' },
     { icon: '📄', color: 'from-blue-400 to-indigo-500', bg: 'bg-blue-50', label: 'Summarize', desc: 'Concise executive meeting summary and key discussion takeaways.' },
-    { icon: '📊', color: 'from-purple-400 to-violet-500', bg: 'bg-purple-50', label: 'Analyze', desc: 'Sentiment tone & topic modeling via Amazon Comprehend Cloud AI.' },
+    { icon: '📊', color: 'from-purple-400 to-violet-500', bg: 'bg-purple-50', label: 'Analyze', desc: 'Sentiment tone & topic modeling via Google Cloud Natural Language Cloud AI.' },
     { icon: '☑️', color: 'from-orange-400 to-amber-500', bg: 'bg-orange-50', label: 'Extract', desc: 'Decisions, action items, owners & deadline tracking in one click.' },
   ];
 
@@ -193,7 +193,7 @@ function LandingPage({ onGetStarted }) {
     { icon: '〰️', label: 'Transcription', sub: '(Whisper ASR)' },
     { icon: '👥', label: 'Speaker\nDiarization', sub: null },
     { icon: '📝', label: 'Summarization', sub: '(FLAN-T5)' },
-    { icon: '😊', label: 'Sentiment\nAnalysis', sub: '(AWS Comprehend)' },
+    { icon: '😊', label: 'Sentiment\nAnalysis', sub: '(Google Cloud Natural Language)' },
     { icon: '🏷️', label: 'Topic Modeling', sub: '(BERTopic)' },
     { icon: '✅', label: 'Decisions &\nAction Items', sub: null },
   ];
@@ -211,7 +211,7 @@ function LandingPage({ onGetStarted }) {
         <div className="max-w-7xl mx-auto px-6 h-[70px] flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={()=>setActiveNav('Home')}>
             <div className="w-10 h-10 rounded-2xl clay-blue flex items-center justify-center font-black text-white text-lg shadow-lg shadow-blue-200">M</div>
-            <span className="font-black text-xl text-slate-800 tracking-tight">Meeting Minutes AI</span>
+            <span className="font-black text-xl text-slate-800 tracking-tight">WhisperMind AI</span>
             <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2.5 py-0.5 rounded-full">Pro</span>
           </div>
           <div className="hidden md:flex items-center gap-1">
@@ -243,7 +243,7 @@ function LandingPage({ onGetStarted }) {
             </h1>
           </div>
           <p className="text-xl text-slate-500 leading-relaxed max-w-md font-medium">
-            Transcribe, summarize, analyze, and extract key decisions with AI — powered by Whisper, FLAN-T5, and Amazon Comprehend.
+            Transcribe, summarize, analyze, and extract key decisions with AI — powered by Whisper, FLAN-T5, and Google Cloud Natural Language.
           </p>
           <div className="flex flex-wrap gap-4">
             <button onClick={onGetStarted} className="btn-press clay-teal flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-white text-lg shadow-xl shadow-teal-200 group">
@@ -430,9 +430,9 @@ function LandingPage({ onGetStarted }) {
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2 font-bold text-slate-700">
             <div className="w-7 h-7 rounded-xl clay-blue flex items-center justify-center text-white text-xs font-black">M</div>
-            Meeting Minutes AI
+            WhisperMind AI
           </div>
-          <span className="text-slate-400 font-medium text-xs">Powered by Whisper ASR · FLAN-T5 · Amazon Comprehend</span>
+          <span className="text-slate-400 font-medium text-xs">Powered by Whisper ASR · FLAN-T5 · Google Cloud Natural Language</span>
         </div>
       </footer>
 
@@ -484,24 +484,13 @@ function AppPage({ onBack }) {
   const fileInputRef = useRef();
 
   const STEPS = [
-    'Uploading audio…',
-    'Transcribing with Whisper ASR…',
-    'Aligning speaker diarization…',
-    'Generating meeting summary (FLAN-T5)…',
-    'Running sentiment analysis (AWS Comprehend)…',
-    'Modeling discussion topics…',
-    'Extracting decisions & action items…',
-    'Finalizing meeting minutes…',
+    { label: 'Uploading audio & initializing…', target: 20 },
+    { label: 'Transcribing speech with Whisper ASR…', target: 55 },
+    { label: 'Aligning speaker turns & diarization…', target: 72 },
+    { label: 'Synthesizing meeting summary (FLAN-T5)…', target: 84 },
+    { label: 'Analyzing sentiment & discussion topics…', target: 93 },
+    { label: 'Extracting decisions & deliverables…', target: 97 },
   ];
-
-  const simulateProgress = async () => {
-    for (let i = 0; i < STEPS.length; i++) {
-      setProgressLabel(STEPS[i]);
-      const target = Math.round(((i+1) / STEPS.length) * 90);
-      setProgress(target);
-      await new Promise(r => setTimeout(r, 600 + Math.random()*400));
-    }
-  };
 
   const handleFile = (f) => {
     setAudioFile(f);
@@ -518,11 +507,32 @@ function AppPage({ onBack }) {
   const handleGenerate = async () => {
     if (!audioFile) return;
     setIsProcessing(true);
-    setProgress(0);
-    setProgressLabel('Initialising pipeline…');
+    setProgress(5);
+    setProgressLabel('Uploading audio…');
     setResult(null);
 
-    simulateProgress();
+    let currentStep = 0;
+    let isComplete = false;
+
+    // Smooth dynamic progress interval that realistically advances while processing
+    const timer = setInterval(() => {
+      if (isComplete) return;
+      if (currentStep < STEPS.length) {
+        const step = STEPS[currentStep];
+        setProgressLabel(step.label);
+        setProgress((prev) => {
+          if (prev < step.target) {
+            return Math.min(step.target, Math.round(prev + 1));
+          } else {
+            currentStep++;
+            return prev;
+          }
+        });
+      } else {
+        // Smooth creeping up to 98% while waiting for server response (integers only)
+        setProgress((prev) => Math.min(98, Math.round(prev + 1)));
+      }
+    }, 600);
 
     try {
       let data;
@@ -536,12 +546,16 @@ function AppPage({ onBack }) {
         const res = await fetch('/api/process-meeting', { method: 'POST', body: form });
         data = await res.json();
       }
+      isComplete = true;
+      clearInterval(timer);
       setProgress(100);
       setProgressLabel('Complete!');
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 400));
       setResult(data);
       setActiveTab('summary');
     } catch (err) {
+      isComplete = true;
+      clearInterval(timer);
       setProgressLabel('Error: ' + err.message);
     } finally {
       setIsProcessing(false);
@@ -585,17 +599,11 @@ function AppPage({ onBack }) {
         <div className="max-w-7xl mx-auto px-6 h-[70px] flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={onBack}>
             <div className="w-10 h-10 rounded-2xl clay-blue flex items-center justify-center font-black text-white text-lg shadow-lg shadow-blue-200">M</div>
-            <span className="font-black text-xl text-slate-800 tracking-tight">Meeting Minutes AI</span>
+            <span className="font-black text-xl text-slate-800 tracking-tight">WhisperMind AI</span>
             <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2.5 py-0.5 rounded-full">Pro</span>
           </div>
           {result && (
             <div className="flex items-center gap-3">
-              <button onClick={handleExportDocx} className="btn-press clay-blue px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-md gap-2 flex items-center">
-                <span>📄</span> Download DOCX
-              </button>
-              <button onClick={handleExportJSON} className="btn-press clay px-4 py-2 rounded-2xl text-sm font-bold text-slate-700 shadow-sm gap-2 flex items-center">
-                <span>📦</span> Export JSON
-              </button>
             </div>
           )}
         </div>
@@ -707,7 +715,7 @@ function AppPage({ onBack }) {
           <div className="clay rounded-3xl p-6 shadow-lg">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-bold text-slate-700">{progressLabel}</span>
-              <span className="text-sm font-black text-blue-600">{progress}%</span>
+              <span className="text-sm font-black text-blue-600">{Math.round(progress)}%</span>
             </div>
             <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
               <div
@@ -738,7 +746,7 @@ function AppPage({ onBack }) {
             <div className="flex flex-wrap items-center justify-center gap-2">
               {[
                 ['🎤','Audio Input'],['〰️','Transcription'],['👥','Diarization'],
-                ['📝','Summarization'],['😊','Sentiment\n(AWS)'],['🏷️','Topics\n(BERTopic)'],['✅','Minutes']
+                ['📝','Summarization'],['😊','Sentiment\n(Google Cloud)'],['🏷️','Topics\n(BERTopic)'],['✅','Minutes']
               ].map(([ic,lb],i,arr)=>(
                 <React.Fragment key={lb}>
                   <div className="step-pill clay rounded-2xl px-3 py-2 text-center">
@@ -765,8 +773,19 @@ function AppPage({ onBack }) {
                   </div>
                   <h2 className="text-2xl font-black text-slate-800">{result.meeting_title}</h2>
                   <p className="text-sm text-slate-400 font-medium mt-0.5">
-                    {result.meeting_date} · {result.participants?.join(', ')}
+                    {result.meeting_date}
                   </p>
+                </div>
+                {/* Export buttons – right next to the summary heading */}
+                <div className="flex items-center gap-2 mt-1">
+                  <button onClick={handleExportDocx}
+                    className="btn-press clay-blue px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-md flex items-center gap-2 hover:scale-105 transition-transform">
+                    📄 Download DOCX
+                  </button>
+                  <button onClick={handleExportJSON}
+                    className="btn-press clay px-4 py-2 rounded-2xl text-sm font-bold text-slate-700 shadow-sm flex items-center gap-2 hover:scale-105 transition-transform">
+                    📦 Export JSON
+                  </button>
                 </div>
               </div>
 
@@ -860,7 +879,7 @@ function AppPage({ onBack }) {
                         </div>
                       ))}
                     </div>
-                    <span className="text-xs font-black text-teal-600 bg-teal-100 px-3 py-1.5 rounded-full">Amazon Comprehend Cloud AI</span>
+                    <span className="text-xs font-black text-teal-600 bg-teal-100 px-3 py-1.5 rounded-full">Google Cloud Natural Language Cloud AI</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {Object.entries(result.sentiment_analysis.per_member || {}).map(([sp,data])=>(
@@ -882,7 +901,7 @@ function AppPage({ onBack }) {
                 <div className="space-y-5">
                   <div className="clay rounded-2xl px-5 py-3 flex items-center gap-3">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Topic Modeling</span>
-                    <span className="text-xs font-bold text-purple-600 bg-purple-100 px-2.5 py-0.5 rounded-full">BERTopic · AWS Comprehend</span>
+                    <span className="text-xs font-bold text-purple-600 bg-purple-100 px-2.5 py-0.5 rounded-full">BERTopic · Google Cloud Natural Language</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {result.topic_modeling.topics?.map(t=>(
